@@ -1,0 +1,52 @@
+%{
+#include <iostream>
+#include <cstdlib>
+#include <string>
+
+using namespace std;
+
+int yylex();
+
+void yyerror (string s) {
+cerr<<s<<endl;
+exit(EXIT_FAILURE);
+}
+
+
+
+%}
+
+%union {string s;}
+%token i_token
+%token ili_token
+%token ekvi_token
+%token implikacija_token
+%token negacija_token
+%token <s> id_token
+
+
+%%
+
+Program: Program Naredba
+| Naredba
+;
+
+Naredba: E
+;
+
+E: E ili_token E
+| E i_token E
+| E ekvi_token E
+| E implikacija_token E
+| negacija_token E
+| id_token
+| '(' E ')'
+;
+
+
+%%
+
+int main() {
+yyparse();
+return 0;
+}

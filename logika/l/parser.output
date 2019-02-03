@@ -1,0 +1,363 @@
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Program Naredba '\n'
+    2        | Naredba '\n'
+
+    3 Naredba: E
+    4        | Dodela
+
+    5 E: E i_token E
+    6  | E ili_token E
+    7  | E ekv_token E
+    8  | E sledi_token E
+    9  | '!' E
+   10  | '(' E ')'
+   11  | id_token
+   12  | true_token
+   13  | false_token
+
+   14 Dodela: id_token dodela_token E
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 1 2
+'!' (33) 9
+'(' (40) 10
+')' (41) 10
+error (256)
+i_token (258) 5
+ili_token (259) 6
+ekv_token (260) 7
+sledi_token (261) 8
+true_token (262) 12
+false_token (263) 13
+dodela_token (264) 14
+id_token (265) 11 14
+
+
+Nonterminals, with rules where they appear
+
+$accept (15)
+    on left: 0
+Program (16)
+    on left: 1 2, on right: 0 1
+Naredba (17)
+    on left: 3 4, on right: 1 2
+E (18)
+    on left: 5 6 7 8 9 10 11 12 13, on right: 3 5 6 7 8 9 10 14
+Dodela (19)
+    on left: 14, on right: 4
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    true_token   shift, and go to state 1
+    false_token  shift, and go to state 2
+    id_token     shift, and go to state 3
+    '!'          shift, and go to state 4
+    '('          shift, and go to state 5
+
+    Program  go to state 6
+    Naredba  go to state 7
+    E        go to state 8
+    Dodela   go to state 9
+
+
+State 1
+
+   12 E: true_token .
+
+    $default  reduce using rule 12 (E)
+
+
+State 2
+
+   13 E: false_token .
+
+    $default  reduce using rule 13 (E)
+
+
+State 3
+
+   11 E: id_token .
+   14 Dodela: id_token . dodela_token E
+
+    dodela_token  shift, and go to state 10
+
+    $default  reduce using rule 11 (E)
+
+
+State 4
+
+    9 E: '!' . E
+
+    true_token   shift, and go to state 1
+    false_token  shift, and go to state 2
+    id_token     shift, and go to state 11
+    '!'          shift, and go to state 4
+    '('          shift, and go to state 5
+
+    E  go to state 12
+
+
+State 5
+
+   10 E: '(' . E ')'
+
+    true_token   shift, and go to state 1
+    false_token  shift, and go to state 2
+    id_token     shift, and go to state 11
+    '!'          shift, and go to state 4
+    '('          shift, and go to state 5
+
+    E  go to state 13
+
+
+State 6
+
+    0 $accept: Program . $end
+    1 Program: Program . Naredba '\n'
+
+    $end         shift, and go to state 14
+    true_token   shift, and go to state 1
+    false_token  shift, and go to state 2
+    id_token     shift, and go to state 3
+    '!'          shift, and go to state 4
+    '('          shift, and go to state 5
+
+    Naredba  go to state 15
+    E        go to state 8
+    Dodela   go to state 9
+
+
+State 7
+
+    2 Program: Naredba . '\n'
+
+    '\n'  shift, and go to state 16
+
+
+State 8
+
+    3 Naredba: E .
+    5 E: E . i_token E
+    6  | E . ili_token E
+    7  | E . ekv_token E
+    8  | E . sledi_token E
+
+    i_token      shift, and go to state 17
+    ili_token    shift, and go to state 18
+    ekv_token    shift, and go to state 19
+    sledi_token  shift, and go to state 20
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 9
+
+    4 Naredba: Dodela .
+
+    $default  reduce using rule 4 (Naredba)
+
+
+State 10
+
+   14 Dodela: id_token dodela_token . E
+
+    true_token   shift, and go to state 1
+    false_token  shift, and go to state 2
+    id_token     shift, and go to state 11
+    '!'          shift, and go to state 4
+    '('          shift, and go to state 5
+
+    E  go to state 21
+
+
+State 11
+
+   11 E: id_token .
+
+    $default  reduce using rule 11 (E)
+
+
+State 12
+
+    5 E: E . i_token E
+    6  | E . ili_token E
+    7  | E . ekv_token E
+    8  | E . sledi_token E
+    9  | '!' E .
+
+    $default  reduce using rule 9 (E)
+
+
+State 13
+
+    5 E: E . i_token E
+    6  | E . ili_token E
+    7  | E . ekv_token E
+    8  | E . sledi_token E
+   10  | '(' E . ')'
+
+    i_token      shift, and go to state 17
+    ili_token    shift, and go to state 18
+    ekv_token    shift, and go to state 19
+    sledi_token  shift, and go to state 20
+    ')'          shift, and go to state 22
+
+
+State 14
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 15
+
+    1 Program: Program Naredba . '\n'
+
+    '\n'  shift, and go to state 23
+
+
+State 16
+
+    2 Program: Naredba '\n' .
+
+    $default  reduce using rule 2 (Program)
+
+
+State 17
+
+    5 E: E i_token . E
+
+    true_token   shift, and go to state 1
+    false_token  shift, and go to state 2
+    id_token     shift, and go to state 11
+    '!'          shift, and go to state 4
+    '('          shift, and go to state 5
+
+    E  go to state 24
+
+
+State 18
+
+    6 E: E ili_token . E
+
+    true_token   shift, and go to state 1
+    false_token  shift, and go to state 2
+    id_token     shift, and go to state 11
+    '!'          shift, and go to state 4
+    '('          shift, and go to state 5
+
+    E  go to state 25
+
+
+State 19
+
+    7 E: E ekv_token . E
+
+    true_token   shift, and go to state 1
+    false_token  shift, and go to state 2
+    id_token     shift, and go to state 11
+    '!'          shift, and go to state 4
+    '('          shift, and go to state 5
+
+    E  go to state 26
+
+
+State 20
+
+    8 E: E sledi_token . E
+
+    true_token   shift, and go to state 1
+    false_token  shift, and go to state 2
+    id_token     shift, and go to state 11
+    '!'          shift, and go to state 4
+    '('          shift, and go to state 5
+
+    E  go to state 27
+
+
+State 21
+
+    5 E: E . i_token E
+    6  | E . ili_token E
+    7  | E . ekv_token E
+    8  | E . sledi_token E
+   14 Dodela: id_token dodela_token E .
+
+    i_token      shift, and go to state 17
+    ili_token    shift, and go to state 18
+    ekv_token    shift, and go to state 19
+    sledi_token  shift, and go to state 20
+
+    $default  reduce using rule 14 (Dodela)
+
+
+State 22
+
+   10 E: '(' E ')' .
+
+    $default  reduce using rule 10 (E)
+
+
+State 23
+
+    1 Program: Program Naredba '\n' .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 24
+
+    5 E: E . i_token E
+    5  | E i_token E .
+    6  | E . ili_token E
+    7  | E . ekv_token E
+    8  | E . sledi_token E
+
+    $default  reduce using rule 5 (E)
+
+
+State 25
+
+    5 E: E . i_token E
+    6  | E . ili_token E
+    6  | E ili_token E .
+    7  | E . ekv_token E
+    8  | E . sledi_token E
+
+    $default  reduce using rule 6 (E)
+
+
+State 26
+
+    5 E: E . i_token E
+    6  | E . ili_token E
+    7  | E . ekv_token E
+    7  | E ekv_token E .
+    8  | E . sledi_token E
+
+    i_token      shift, and go to state 17
+    ili_token    shift, and go to state 18
+    sledi_token  shift, and go to state 20
+
+    $default  reduce using rule 7 (E)
+
+
+State 27
+
+    5 E: E . i_token E
+    6  | E . ili_token E
+    7  | E . ekv_token E
+    8  | E . sledi_token E
+    8  | E sledi_token E .
+
+    $default  reduce using rule 8 (E)

@@ -1,0 +1,32 @@
+%option noyywrap
+%option nounput
+
+%{
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
+
+
+#include "parser.tab.hpp"
+
+%}
+
+
+
+
+
+%%
+[a-z] {yylval.s=new string(yytext); return id_token;}
+[/\<>=!()] {return *yytext;}
+[ \t\n] { }
+. {
+cerr<<"Leksicka greska, nepoznat karakter: <<*yytext<<endl;
+exit(EXIT_FAILURE);
+}
+
+
+
+
+
+%%

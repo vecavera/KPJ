@@ -1,0 +1,62 @@
+%{
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <map>
+#define YYDEBUG 1
+
+using namespace std;
+
+int yylex();
+
+void yyerror (string s) {
+cerr<<s<<endl;
+exit(EXIT_FAILURE);
+}
+
+map <string,bool> tablica;
+
+%}
+
+%union {string* s;
+	bool b;	}
+%token <b> true_token
+%token <b> false_token
+%token ispis_token
+%token dodela_token
+%token i_token
+%token ili_token
+%token ekvi_token
+%token implikacija_token
+%token negacija_token
+%token <s> id_token
+%type<b> E
+
+%%
+
+Program: Program Naredba '\n'
+| Naredba '\n'
+;
+
+Naredba: E {if($1) cout<<"True"<<endl; else cout<<"False"<<endl;}
+| id_token dodela_token E {tablica[*$1]=$3; cout<<tablica[*$1]<<endl;}
+;
+
+E: E ili_token E {$$ = $1 || $3;}
+| E i_token E {$$ = $1 && $3;}
+| E ekvi_token E {if($1==$3) $$ = true; else $$=false;}
+| E implikacija_token E {if ($1==true) $$=true; if($1==$3) $$=true; else $$=false;}
+| negacija_token E {$$=!$2;}
+| id_token {$$=tablica[*$1];}
+| '(' E ')'{$$=$2;}
+| true_token {$$=$1;}
+| false_token {$$=$1;}
+;
+
+%%
+
+int main() {
+//yydebug=1;
+yyparse();
+return 0;
+}

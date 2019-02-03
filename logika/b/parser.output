@@ -1,0 +1,377 @@
+State 9 conflicts: 4 shift/reduce
+State 22 conflicts: 4 shift/reduce
+State 23 conflicts: 4 shift/reduce
+State 24 conflicts: 4 shift/reduce
+State 25 conflicts: 4 shift/reduce
+
+
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Program Naredba
+    2        | Naredba
+
+    3 Naredba: E
+    4        | id_token dodela_token true_token
+    5        | id_token dodela_token false_token
+    6        | id_token ispis_token
+
+    7 E: E ili_token E
+    8  | E i_token E
+    9  | E ekvi_token E
+   10  | E implikacija_token E
+   11  | negacija_token E
+   12  | I
+   13  | '(' E ')'
+
+   14 I: id_token
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 13
+')' (41) 13
+error (256)
+true_token (258) 4
+false_token (259) 5
+ispis_token (260) 6
+dodela_token (261) 4 5
+i_token (262) 8
+ili_token (263) 7
+ekvi_token (264) 9
+implikacija_token (265) 10
+negacija_token (266) 11
+id_token (267) 4 5 6 14
+
+
+Nonterminals, with rules where they appear
+
+$accept (15)
+    on left: 0
+Program (16)
+    on left: 1 2, on right: 0 1
+Naredba (17)
+    on left: 3 4 5 6, on right: 1 2
+E (18)
+    on left: 7 8 9 10 11 12 13, on right: 3 7 8 9 10 11 13
+I (19)
+    on left: 14, on right: 12
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    negacija_token  shift, and go to state 1
+    id_token        shift, and go to state 2
+    '('             shift, and go to state 3
+
+    Program  go to state 4
+    Naredba  go to state 5
+    E        go to state 6
+    I        go to state 7
+
+
+State 1
+
+   11 E: negacija_token . E
+
+    negacija_token  shift, and go to state 1
+    id_token        shift, and go to state 8
+    '('             shift, and go to state 3
+
+    E  go to state 9
+    I  go to state 7
+
+
+State 2
+
+    4 Naredba: id_token . dodela_token true_token
+    5        | id_token . dodela_token false_token
+    6        | id_token . ispis_token
+   14 I: id_token .
+
+    ispis_token   shift, and go to state 10
+    dodela_token  shift, and go to state 11
+
+    $default  reduce using rule 14 (I)
+
+
+State 3
+
+   13 E: '(' . E ')'
+
+    negacija_token  shift, and go to state 1
+    id_token        shift, and go to state 8
+    '('             shift, and go to state 3
+
+    E  go to state 12
+    I  go to state 7
+
+
+State 4
+
+    0 $accept: Program . $end
+    1 Program: Program . Naredba
+
+    $end            shift, and go to state 13
+    negacija_token  shift, and go to state 1
+    id_token        shift, and go to state 2
+    '('             shift, and go to state 3
+
+    Naredba  go to state 14
+    E        go to state 6
+    I        go to state 7
+
+
+State 5
+
+    2 Program: Naredba .
+
+    $default  reduce using rule 2 (Program)
+
+
+State 6
+
+    3 Naredba: E .
+    7 E: E . ili_token E
+    8  | E . i_token E
+    9  | E . ekvi_token E
+   10  | E . implikacija_token E
+
+    i_token            shift, and go to state 15
+    ili_token          shift, and go to state 16
+    ekvi_token         shift, and go to state 17
+    implikacija_token  shift, and go to state 18
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 7
+
+   12 E: I .
+
+    $default  reduce using rule 12 (E)
+
+
+State 8
+
+   14 I: id_token .
+
+    $default  reduce using rule 14 (I)
+
+
+State 9
+
+    7 E: E . ili_token E
+    8  | E . i_token E
+    9  | E . ekvi_token E
+   10  | E . implikacija_token E
+   11  | negacija_token E .
+
+    i_token            shift, and go to state 15
+    ili_token          shift, and go to state 16
+    ekvi_token         shift, and go to state 17
+    implikacija_token  shift, and go to state 18
+
+    i_token            [reduce using rule 11 (E)]
+    ili_token          [reduce using rule 11 (E)]
+    ekvi_token         [reduce using rule 11 (E)]
+    implikacija_token  [reduce using rule 11 (E)]
+    $default           reduce using rule 11 (E)
+
+
+State 10
+
+    6 Naredba: id_token ispis_token .
+
+    $default  reduce using rule 6 (Naredba)
+
+
+State 11
+
+    4 Naredba: id_token dodela_token . true_token
+    5        | id_token dodela_token . false_token
+
+    true_token   shift, and go to state 19
+    false_token  shift, and go to state 20
+
+
+State 12
+
+    7 E: E . ili_token E
+    8  | E . i_token E
+    9  | E . ekvi_token E
+   10  | E . implikacija_token E
+   13  | '(' E . ')'
+
+    i_token            shift, and go to state 15
+    ili_token          shift, and go to state 16
+    ekvi_token         shift, and go to state 17
+    implikacija_token  shift, and go to state 18
+    ')'                shift, and go to state 21
+
+
+State 13
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 14
+
+    1 Program: Program Naredba .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 15
+
+    8 E: E i_token . E
+
+    negacija_token  shift, and go to state 1
+    id_token        shift, and go to state 8
+    '('             shift, and go to state 3
+
+    E  go to state 22
+    I  go to state 7
+
+
+State 16
+
+    7 E: E ili_token . E
+
+    negacija_token  shift, and go to state 1
+    id_token        shift, and go to state 8
+    '('             shift, and go to state 3
+
+    E  go to state 23
+    I  go to state 7
+
+
+State 17
+
+    9 E: E ekvi_token . E
+
+    negacija_token  shift, and go to state 1
+    id_token        shift, and go to state 8
+    '('             shift, and go to state 3
+
+    E  go to state 24
+    I  go to state 7
+
+
+State 18
+
+   10 E: E implikacija_token . E
+
+    negacija_token  shift, and go to state 1
+    id_token        shift, and go to state 8
+    '('             shift, and go to state 3
+
+    E  go to state 25
+    I  go to state 7
+
+
+State 19
+
+    4 Naredba: id_token dodela_token true_token .
+
+    $default  reduce using rule 4 (Naredba)
+
+
+State 20
+
+    5 Naredba: id_token dodela_token false_token .
+
+    $default  reduce using rule 5 (Naredba)
+
+
+State 21
+
+   13 E: '(' E ')' .
+
+    $default  reduce using rule 13 (E)
+
+
+State 22
+
+    7 E: E . ili_token E
+    8  | E . i_token E
+    8  | E i_token E .
+    9  | E . ekvi_token E
+   10  | E . implikacija_token E
+
+    i_token            shift, and go to state 15
+    ili_token          shift, and go to state 16
+    ekvi_token         shift, and go to state 17
+    implikacija_token  shift, and go to state 18
+
+    i_token            [reduce using rule 8 (E)]
+    ili_token          [reduce using rule 8 (E)]
+    ekvi_token         [reduce using rule 8 (E)]
+    implikacija_token  [reduce using rule 8 (E)]
+    $default           reduce using rule 8 (E)
+
+
+State 23
+
+    7 E: E . ili_token E
+    7  | E ili_token E .
+    8  | E . i_token E
+    9  | E . ekvi_token E
+   10  | E . implikacija_token E
+
+    i_token            shift, and go to state 15
+    ili_token          shift, and go to state 16
+    ekvi_token         shift, and go to state 17
+    implikacija_token  shift, and go to state 18
+
+    i_token            [reduce using rule 7 (E)]
+    ili_token          [reduce using rule 7 (E)]
+    ekvi_token         [reduce using rule 7 (E)]
+    implikacija_token  [reduce using rule 7 (E)]
+    $default           reduce using rule 7 (E)
+
+
+State 24
+
+    7 E: E . ili_token E
+    8  | E . i_token E
+    9  | E . ekvi_token E
+    9  | E ekvi_token E .
+   10  | E . implikacija_token E
+
+    i_token            shift, and go to state 15
+    ili_token          shift, and go to state 16
+    ekvi_token         shift, and go to state 17
+    implikacija_token  shift, and go to state 18
+
+    i_token            [reduce using rule 9 (E)]
+    ili_token          [reduce using rule 9 (E)]
+    ekvi_token         [reduce using rule 9 (E)]
+    implikacija_token  [reduce using rule 9 (E)]
+    $default           reduce using rule 9 (E)
+
+
+State 25
+
+    7 E: E . ili_token E
+    8  | E . i_token E
+    9  | E . ekvi_token E
+   10  | E . implikacija_token E
+   10  | E implikacija_token E .
+
+    i_token            shift, and go to state 15
+    ili_token          shift, and go to state 16
+    ekvi_token         shift, and go to state 17
+    implikacija_token  shift, and go to state 18
+
+    i_token            [reduce using rule 10 (E)]
+    ili_token          [reduce using rule 10 (E)]
+    ekvi_token         [reduce using rule 10 (E)]
+    implikacija_token  [reduce using rule 10 (E)]
+    $default           reduce using rule 10 (E)
