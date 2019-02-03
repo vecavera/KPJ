@@ -1,0 +1,300 @@
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: pocetak_token NizNaredbi kraj_token
+
+    2 NizNaredbi: NizNaredbi ';' Naredba
+    3           | Naredba
+
+    4 Naredba: ispisi_token '(' niska_token ')'
+    5        | ispisi_token '(' E ')'
+
+    6 E: E '+' E
+    7  | E '-' E
+    8  | E '*' E
+    9  | E mod_token E
+   10  | E div_token E
+   11  | num_token
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 4 5
+')' (41) 4 5
+'*' (42) 8
+'+' (43) 6
+'-' (45) 7
+';' (59) 2
+error (256)
+pocetak_token (258) 1
+kraj_token (259) 1
+ispisi_token (260) 4 5
+mod_token (261) 9
+div_token (262) 10
+num_token (263) 11
+niska_token (264) 4
+
+
+Nonterminals, with rules where they appear
+
+$accept (16)
+    on left: 0
+Program (17)
+    on left: 1, on right: 0
+NizNaredbi (18)
+    on left: 2 3, on right: 1 2
+Naredba (19)
+    on left: 4 5, on right: 2 3
+E (20)
+    on left: 6 7 8 9 10 11, on right: 5 6 7 8 9 10
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    pocetak_token  shift, and go to state 1
+
+    Program  go to state 2
+
+
+State 1
+
+    1 Program: pocetak_token . NizNaredbi kraj_token
+
+    ispisi_token  shift, and go to state 3
+
+    NizNaredbi  go to state 4
+    Naredba     go to state 5
+
+
+State 2
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 6
+
+
+State 3
+
+    4 Naredba: ispisi_token . '(' niska_token ')'
+    5        | ispisi_token . '(' E ')'
+
+    '('  shift, and go to state 7
+
+
+State 4
+
+    1 Program: pocetak_token NizNaredbi . kraj_token
+    2 NizNaredbi: NizNaredbi . ';' Naredba
+
+    kraj_token  shift, and go to state 8
+    ';'         shift, and go to state 9
+
+
+State 5
+
+    3 NizNaredbi: Naredba .
+
+    $default  reduce using rule 3 (NizNaredbi)
+
+
+State 6
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 7
+
+    4 Naredba: ispisi_token '(' . niska_token ')'
+    5        | ispisi_token '(' . E ')'
+
+    num_token    shift, and go to state 10
+    niska_token  shift, and go to state 11
+
+    E  go to state 12
+
+
+State 8
+
+    1 Program: pocetak_token NizNaredbi kraj_token .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 9
+
+    2 NizNaredbi: NizNaredbi ';' . Naredba
+
+    ispisi_token  shift, and go to state 3
+
+    Naredba  go to state 13
+
+
+State 10
+
+   11 E: num_token .
+
+    $default  reduce using rule 11 (E)
+
+
+State 11
+
+    4 Naredba: ispisi_token '(' niska_token . ')'
+
+    ')'  shift, and go to state 14
+
+
+State 12
+
+    5 Naredba: ispisi_token '(' E . ')'
+    6 E: E . '+' E
+    7  | E . '-' E
+    8  | E . '*' E
+    9  | E . mod_token E
+   10  | E . div_token E
+
+    mod_token  shift, and go to state 15
+    div_token  shift, and go to state 16
+    '+'        shift, and go to state 17
+    '-'        shift, and go to state 18
+    '*'        shift, and go to state 19
+    ')'        shift, and go to state 20
+
+
+State 13
+
+    2 NizNaredbi: NizNaredbi ';' Naredba .
+
+    $default  reduce using rule 2 (NizNaredbi)
+
+
+State 14
+
+    4 Naredba: ispisi_token '(' niska_token ')' .
+
+    $default  reduce using rule 4 (Naredba)
+
+
+State 15
+
+    9 E: E mod_token . E
+
+    num_token  shift, and go to state 10
+
+    E  go to state 21
+
+
+State 16
+
+   10 E: E div_token . E
+
+    num_token  shift, and go to state 10
+
+    E  go to state 22
+
+
+State 17
+
+    6 E: E '+' . E
+
+    num_token  shift, and go to state 10
+
+    E  go to state 23
+
+
+State 18
+
+    7 E: E '-' . E
+
+    num_token  shift, and go to state 10
+
+    E  go to state 24
+
+
+State 19
+
+    8 E: E '*' . E
+
+    num_token  shift, and go to state 10
+
+    E  go to state 25
+
+
+State 20
+
+    5 Naredba: ispisi_token '(' E ')' .
+
+    $default  reduce using rule 5 (Naredba)
+
+
+State 21
+
+    6 E: E . '+' E
+    7  | E . '-' E
+    8  | E . '*' E
+    9  | E . mod_token E
+    9  | E mod_token E .
+   10  | E . div_token E
+
+    $default  reduce using rule 9 (E)
+
+
+State 22
+
+    6 E: E . '+' E
+    7  | E . '-' E
+    8  | E . '*' E
+    9  | E . mod_token E
+   10  | E . div_token E
+   10  | E div_token E .
+
+    $default  reduce using rule 10 (E)
+
+
+State 23
+
+    6 E: E . '+' E
+    6  | E '+' E .
+    7  | E . '-' E
+    8  | E . '*' E
+    9  | E . mod_token E
+   10  | E . div_token E
+
+    mod_token  shift, and go to state 15
+    div_token  shift, and go to state 16
+    '*'        shift, and go to state 19
+
+    $default  reduce using rule 6 (E)
+
+
+State 24
+
+    6 E: E . '+' E
+    7  | E . '-' E
+    7  | E '-' E .
+    8  | E . '*' E
+    9  | E . mod_token E
+   10  | E . div_token E
+
+    mod_token  shift, and go to state 15
+    div_token  shift, and go to state 16
+    '*'        shift, and go to state 19
+
+    $default  reduce using rule 7 (E)
+
+
+State 25
+
+    6 E: E . '+' E
+    7  | E . '-' E
+    8  | E . '*' E
+    8  | E '*' E .
+    9  | E . mod_token E
+   10  | E . div_token E
+
+    $default  reduce using rule 8 (E)
