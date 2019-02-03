@@ -1,0 +1,65 @@
+%{
+#include<iostream>
+#include<cstdlib>
+#include<cmath>
+#include<string>
+#include<map>
+
+#include "funkcija.hpp"
+
+#define YYDEBUG 1
+
+
+using namespace std;
+
+int yylex();
+
+map<string,Funkcija*> tablica;
+
+void yyerror (string s){
+cerr<<s<<endl;
+exit(EXIT_FAILURE);
+}
+
+
+%}
+
+%union {
+double d;
+string* s;
+Funkcija* f;
+}
+
+%token funkcija_token x_token 
+%token <s> id_token
+%token <d> num_token
+%type <f> E
+
+%left '+' '-'
+%left '*' '/'
+%nonassoc sin_token cos_token
+
+%%
+Program: Program Naredba
+| Naredba
+;
+
+Naredba: funkcija_token id_token '=' '\"' E '\"' {tablica[*$2]=*$5;}
+| id_token {tablica[*$1]->ispisi(cout);}
+;
+E: E '+' E {$$=new Plus($1, $3);}
+| E '*' E {$$=new Puta($1, $3);}
+| sin_token '(' E ')' {$$= new Sin($3);}
+| cos_token '(' E ')' {$$= new Cos($3);}
+| num_token {$$=new KonstantnaFunkcija($1);}
+| x_token {$$=new IdentickaFunkcija();}
+;
+
+
+%%
+
+int main() {
+yydebug=0;
+yyparse();
+return 0;
+}

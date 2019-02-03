@@ -1,0 +1,280 @@
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Program Naredba
+    2        | Naredba
+
+    3 Naredba: funkcija_token id_token '=' '"' E '"'
+    4        | id_token
+
+    5 E: E '+' E
+    6  | E '*' E
+    7  | sin_token '(' E ')'
+    8  | cos_token '(' E ')'
+    9  | num_token
+   10  | x_token
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'"' (34) 3
+'(' (40) 7 8
+')' (41) 7 8
+'*' (42) 6
+'+' (43) 5
+'=' (61) 3
+error (256)
+funkcija_token (258) 3
+x_token (259) 10
+id_token (260) 3 4
+num_token (261) 9
+sin_token (262) 7
+cos_token (263) 8
+
+
+Nonterminals, with rules where they appear
+
+$accept (15)
+    on left: 0
+Program (16)
+    on left: 1 2, on right: 0 1
+Naredba (17)
+    on left: 3 4, on right: 1 2
+E (18)
+    on left: 5 6 7 8 9 10, on right: 3 5 6 7 8
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    funkcija_token  shift, and go to state 1
+    id_token        shift, and go to state 2
+
+    Program  go to state 3
+    Naredba  go to state 4
+
+
+State 1
+
+    3 Naredba: funkcija_token . id_token '=' '"' E '"'
+
+    id_token  shift, and go to state 5
+
+
+State 2
+
+    4 Naredba: id_token .
+
+    $default  reduce using rule 4 (Naredba)
+
+
+State 3
+
+    0 $accept: Program . $end
+    1 Program: Program . Naredba
+
+    $end            shift, and go to state 6
+    funkcija_token  shift, and go to state 1
+    id_token        shift, and go to state 2
+
+    Naredba  go to state 7
+
+
+State 4
+
+    2 Program: Naredba .
+
+    $default  reduce using rule 2 (Program)
+
+
+State 5
+
+    3 Naredba: funkcija_token id_token . '=' '"' E '"'
+
+    '='  shift, and go to state 8
+
+
+State 6
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 7
+
+    1 Program: Program Naredba .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 8
+
+    3 Naredba: funkcija_token id_token '=' . '"' E '"'
+
+    '"'  shift, and go to state 9
+
+
+State 9
+
+    3 Naredba: funkcija_token id_token '=' '"' . E '"'
+
+    x_token    shift, and go to state 10
+    num_token  shift, and go to state 11
+    sin_token  shift, and go to state 12
+    cos_token  shift, and go to state 13
+
+    E  go to state 14
+
+
+State 10
+
+   10 E: x_token .
+
+    $default  reduce using rule 10 (E)
+
+
+State 11
+
+    9 E: num_token .
+
+    $default  reduce using rule 9 (E)
+
+
+State 12
+
+    7 E: sin_token . '(' E ')'
+
+    '('  shift, and go to state 15
+
+
+State 13
+
+    8 E: cos_token . '(' E ')'
+
+    '('  shift, and go to state 16
+
+
+State 14
+
+    3 Naredba: funkcija_token id_token '=' '"' E . '"'
+    5 E: E . '+' E
+    6  | E . '*' E
+
+    '+'  shift, and go to state 17
+    '*'  shift, and go to state 18
+    '"'  shift, and go to state 19
+
+
+State 15
+
+    7 E: sin_token '(' . E ')'
+
+    x_token    shift, and go to state 10
+    num_token  shift, and go to state 11
+    sin_token  shift, and go to state 12
+    cos_token  shift, and go to state 13
+
+    E  go to state 20
+
+
+State 16
+
+    8 E: cos_token '(' . E ')'
+
+    x_token    shift, and go to state 10
+    num_token  shift, and go to state 11
+    sin_token  shift, and go to state 12
+    cos_token  shift, and go to state 13
+
+    E  go to state 21
+
+
+State 17
+
+    5 E: E '+' . E
+
+    x_token    shift, and go to state 10
+    num_token  shift, and go to state 11
+    sin_token  shift, and go to state 12
+    cos_token  shift, and go to state 13
+
+    E  go to state 22
+
+
+State 18
+
+    6 E: E '*' . E
+
+    x_token    shift, and go to state 10
+    num_token  shift, and go to state 11
+    sin_token  shift, and go to state 12
+    cos_token  shift, and go to state 13
+
+    E  go to state 23
+
+
+State 19
+
+    3 Naredba: funkcija_token id_token '=' '"' E '"' .
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 20
+
+    5 E: E . '+' E
+    6  | E . '*' E
+    7  | sin_token '(' E . ')'
+
+    '+'  shift, and go to state 17
+    '*'  shift, and go to state 18
+    ')'  shift, and go to state 24
+
+
+State 21
+
+    5 E: E . '+' E
+    6  | E . '*' E
+    8  | cos_token '(' E . ')'
+
+    '+'  shift, and go to state 17
+    '*'  shift, and go to state 18
+    ')'  shift, and go to state 25
+
+
+State 22
+
+    5 E: E . '+' E
+    5  | E '+' E .
+    6  | E . '*' E
+
+    '*'  shift, and go to state 18
+
+    $default  reduce using rule 5 (E)
+
+
+State 23
+
+    5 E: E . '+' E
+    6  | E . '*' E
+    6  | E '*' E .
+
+    $default  reduce using rule 6 (E)
+
+
+State 24
+
+    7 E: sin_token '(' E ')' .
+
+    $default  reduce using rule 7 (E)
+
+
+State 25
+
+    8 E: cos_token '(' E ')' .
+
+    $default  reduce using rule 8 (E)

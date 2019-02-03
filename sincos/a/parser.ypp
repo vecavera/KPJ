@@ -1,0 +1,57 @@
+%{
+#include<iostream>
+#include<cstdlib>
+#include<cmath>
+#include<string>
+
+#define YYDEBUG 1
+
+
+using namespace std;
+
+int yylex();
+
+void yyerror (string s){
+cerr<<s<<endl;
+exit(EXIT_FAILURE);
+}
+
+
+%}
+
+%union {
+double d;
+}
+
+%token value_token
+%token <d> num_token
+%type <d> E
+
+%left '+' '-'
+%left '*' '/'
+%nonassoc sin_token cos_token
+
+%%
+Program: Program Naredba
+| Naredba
+;
+
+Naredba: value_token '\"' E '\"' {cout<<$3<<endl;}
+;
+E: E '+' E {$$=$1+$3;}
+| E '-' E {$$=$1-$3;}
+| E '*' E {$$=$1*$3;}
+| E '/' E {if(($3)==0) yyerror("Nije dozvoljeno deljenje nulom"); $$=$1/$3;} 
+| sin_token '(' E ')' {$$= sin($3);}
+| cos_token '(' E ')' {$$= cos($3);}
+| num_token {$$=$1;}
+;
+
+
+%%
+
+int main() {
+yydebug=0;
+yyparse();
+return 0;
+}

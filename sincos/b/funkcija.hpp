@@ -1,0 +1,97 @@
+#ifndef FUNKCIJA_HPP
+#define FUNKCIJA_HPP
+
+#include<iostream>
+
+using namespace std;
+
+class Funkcija{
+
+public:
+	virtual void ispisi(ostream& o) const = 0;
+
+};
+
+class KonstantnaFunkcija: public Funkcija {
+
+public:
+	KonstantnaFunkcija(double c): _c(c) { }
+	void ispisi(ostream& o) const{
+		o<<_c;}
+
+protected: 
+	double _c;
+
+
+};
+
+
+class IdentickaFunkcija: public Funkcija{
+
+public:
+	void ispisi(ostream& o) const {
+		o<<"x";}
+	
+};
+
+class ElementarnaFunkcija: public Funkcija {
+
+public: 
+	ElementarnaFunkcija(Funkcija* funkcija, string ime): _funkcija(funkcija), _ime(ime) { }
+	virtual void ispisi (ostream& o) const {
+		o<<_ime<<'('; _funkcija->ispisi(o); o<<')';
+}
+
+protected:
+	Funkcija* _funkcija;
+	string _ime;
+};
+
+class Sin: public ElementarnaFunkcija {
+
+public: 
+	Sin(Funkcija* f) : ElementarnaFunkcija (f, "sin") { } 
+};
+
+
+class Cos: public ElementarnaFunkcija {
+
+public:
+	Cos(Funkcija* f) : ElementarnaFunkcija (f, "cos") { }
+
+};
+
+
+class BinarniOperator: public Funkcija {
+
+public:
+	BinarniOperator(Funkcija* op1, Funkcija* op2, char c): _op1(op1), _op2(op2), _c(c) { }
+	virtual void ispisi (ostream& o) const {
+		_op1->ispisi(o); o<<_c; _op2->ispisi(o);
+}
+
+protected:
+	Funkcija* _op1;
+	Funkcija* _op2;
+	char _c;
+};
+
+class Plus: public BinarniOperator {
+
+public:
+	Plus(Funkcija* f1, Funkcija* f2): BinarniOperator(f1,f2,'+'){}
+
+};
+
+class Puta: public BinarniOperator {
+
+public:
+	Puta(Funkcija* f1, Funkcija* f2): BinarniOperator(f1,f2,'*'){}
+};
+
+
+
+
+
+
+#endif
