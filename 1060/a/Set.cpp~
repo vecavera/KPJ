@@ -1,0 +1,17 @@
+#include "Set.hpp"
+
+using namespace std;
+
+void Set::pisi (ostream& o) const {
+o<<'{';
+for (set<double>::iterator it=begin(); it!= end(); it++)
+o<<(*it)<<',';
+o<<'}';
+
+
+}
+
+ostream& operator<< (ostream& o, const Set& s) {
+s.pisi(o);
+return o;
+}

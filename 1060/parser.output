@@ -1,0 +1,180 @@
+Terminals unused in grammar
+
+   car_token
+
+
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Program Naredba
+    2        | Naredba
+
+    3 Naredba: Lista
+
+    4 Lista: '(' NizElemenata ')'
+
+    5 NizElemenata: NizElemenata Elem
+    6             | Elem
+
+    7 Elem: num_token
+    8     | '+'
+    9     | '*'
+   10     | Lista
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 4
+')' (41) 4
+'*' (42) 9
+'+' (43) 8
+error (256)
+num_token (258) 7
+car_token (259)
+
+
+Nonterminals, with rules where they appear
+
+$accept (9)
+    on left: 0
+Program (10)
+    on left: 1 2, on right: 0 1
+Naredba (11)
+    on left: 3, on right: 1 2
+Lista (12)
+    on left: 4, on right: 3 10
+NizElemenata (13)
+    on left: 5 6, on right: 4 5
+Elem (14)
+    on left: 7 8 9 10, on right: 5 6
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    '('  shift, and go to state 1
+
+    Program  go to state 2
+    Naredba  go to state 3
+    Lista    go to state 4
+
+
+State 1
+
+    4 Lista: '(' . NizElemenata ')'
+
+    num_token  shift, and go to state 5
+    '('        shift, and go to state 1
+    '+'        shift, and go to state 6
+    '*'        shift, and go to state 7
+
+    Lista         go to state 8
+    NizElemenata  go to state 9
+    Elem          go to state 10
+
+
+State 2
+
+    0 $accept: Program . $end
+    1 Program: Program . Naredba
+
+    $end  shift, and go to state 11
+    '('   shift, and go to state 1
+
+    Naredba  go to state 12
+    Lista    go to state 4
+
+
+State 3
+
+    2 Program: Naredba .
+
+    $default  reduce using rule 2 (Program)
+
+
+State 4
+
+    3 Naredba: Lista .
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 5
+
+    7 Elem: num_token .
+
+    $default  reduce using rule 7 (Elem)
+
+
+State 6
+
+    8 Elem: '+' .
+
+    $default  reduce using rule 8 (Elem)
+
+
+State 7
+
+    9 Elem: '*' .
+
+    $default  reduce using rule 9 (Elem)
+
+
+State 8
+
+   10 Elem: Lista .
+
+    $default  reduce using rule 10 (Elem)
+
+
+State 9
+
+    4 Lista: '(' NizElemenata . ')'
+    5 NizElemenata: NizElemenata . Elem
+
+    num_token  shift, and go to state 5
+    '('        shift, and go to state 1
+    ')'        shift, and go to state 13
+    '+'        shift, and go to state 6
+    '*'        shift, and go to state 7
+
+    Lista  go to state 8
+    Elem   go to state 14
+
+
+State 10
+
+    6 NizElemenata: Elem .
+
+    $default  reduce using rule 6 (NizElemenata)
+
+
+State 11
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 12
+
+    1 Program: Program Naredba .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 13
+
+    4 Lista: '(' NizElemenata ')' .
+
+    $default  reduce using rule 4 (Lista)
+
+
+State 14
+
+    5 NizElemenata: NizElemenata Elem .
+
+    $default  reduce using rule 5 (NizElemenata)

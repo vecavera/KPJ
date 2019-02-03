@@ -1,0 +1,311 @@
+State 19 conflicts: 3 shift/reduce
+State 20 conflicts: 3 shift/reduce
+State 21 conflicts: 3 shift/reduce
+
+
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Program Naredba
+    2        | Naredba
+
+    3 Naredba: id_token '=' '{' NizBrojeva '}' ';'
+    4        | id_token '=' num_token oddo_token num_token ';'
+    5        | print_token Izraz ';'
+
+    6 NizBrojeva: NizBrojeva ',' num_token
+    7           | num_token
+
+    8 Izraz: Izraz unija_token Izraz
+    9      | Izraz razlika_token Izraz
+   10      | Izraz presek_token Izraz
+   11      | id_token
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+',' (44) 6
+';' (59) 3 4 5
+'=' (61) 3 4
+'{' (123) 3
+'}' (125) 3
+error (256)
+num_token (258) 4 6 7
+id_token (259) 3 4 11
+oddo_token (260) 4
+print_token (261) 5
+unija_token (262) 8
+razlika_token (263) 9
+presek_token (264) 10
+
+
+Nonterminals, with rules where they appear
+
+$accept (15)
+    on left: 0
+Program (16)
+    on left: 1 2, on right: 0 1
+Naredba (17)
+    on left: 3 4 5, on right: 1 2
+NizBrojeva (18)
+    on left: 6 7, on right: 3 6
+Izraz (19)
+    on left: 8 9 10 11, on right: 5 8 9 10
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    id_token     shift, and go to state 1
+    print_token  shift, and go to state 2
+
+    Program  go to state 3
+    Naredba  go to state 4
+
+
+State 1
+
+    3 Naredba: id_token . '=' '{' NizBrojeva '}' ';'
+    4        | id_token . '=' num_token oddo_token num_token ';'
+
+    '='  shift, and go to state 5
+
+
+State 2
+
+    5 Naredba: print_token . Izraz ';'
+
+    id_token  shift, and go to state 6
+
+    Izraz  go to state 7
+
+
+State 3
+
+    0 $accept: Program . $end
+    1 Program: Program . Naredba
+
+    $end         shift, and go to state 8
+    id_token     shift, and go to state 1
+    print_token  shift, and go to state 2
+
+    Naredba  go to state 9
+
+
+State 4
+
+    2 Program: Naredba .
+
+    $default  reduce using rule 2 (Program)
+
+
+State 5
+
+    3 Naredba: id_token '=' . '{' NizBrojeva '}' ';'
+    4        | id_token '=' . num_token oddo_token num_token ';'
+
+    num_token  shift, and go to state 10
+    '{'        shift, and go to state 11
+
+
+State 6
+
+   11 Izraz: id_token .
+
+    $default  reduce using rule 11 (Izraz)
+
+
+State 7
+
+    5 Naredba: print_token Izraz . ';'
+    8 Izraz: Izraz . unija_token Izraz
+    9      | Izraz . razlika_token Izraz
+   10      | Izraz . presek_token Izraz
+
+    unija_token    shift, and go to state 12
+    razlika_token  shift, and go to state 13
+    presek_token   shift, and go to state 14
+    ';'            shift, and go to state 15
+
+
+State 8
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 9
+
+    1 Program: Program Naredba .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 10
+
+    4 Naredba: id_token '=' num_token . oddo_token num_token ';'
+
+    oddo_token  shift, and go to state 16
+
+
+State 11
+
+    3 Naredba: id_token '=' '{' . NizBrojeva '}' ';'
+
+    num_token  shift, and go to state 17
+
+    NizBrojeva  go to state 18
+
+
+State 12
+
+    8 Izraz: Izraz unija_token . Izraz
+
+    id_token  shift, and go to state 6
+
+    Izraz  go to state 19
+
+
+State 13
+
+    9 Izraz: Izraz razlika_token . Izraz
+
+    id_token  shift, and go to state 6
+
+    Izraz  go to state 20
+
+
+State 14
+
+   10 Izraz: Izraz presek_token . Izraz
+
+    id_token  shift, and go to state 6
+
+    Izraz  go to state 21
+
+
+State 15
+
+    5 Naredba: print_token Izraz ';' .
+
+    $default  reduce using rule 5 (Naredba)
+
+
+State 16
+
+    4 Naredba: id_token '=' num_token oddo_token . num_token ';'
+
+    num_token  shift, and go to state 22
+
+
+State 17
+
+    7 NizBrojeva: num_token .
+
+    $default  reduce using rule 7 (NizBrojeva)
+
+
+State 18
+
+    3 Naredba: id_token '=' '{' NizBrojeva . '}' ';'
+    6 NizBrojeva: NizBrojeva . ',' num_token
+
+    '}'  shift, and go to state 23
+    ','  shift, and go to state 24
+
+
+State 19
+
+    8 Izraz: Izraz . unija_token Izraz
+    8      | Izraz unija_token Izraz .
+    9      | Izraz . razlika_token Izraz
+   10      | Izraz . presek_token Izraz
+
+    unija_token    shift, and go to state 12
+    razlika_token  shift, and go to state 13
+    presek_token   shift, and go to state 14
+
+    unija_token    [reduce using rule 8 (Izraz)]
+    razlika_token  [reduce using rule 8 (Izraz)]
+    presek_token   [reduce using rule 8 (Izraz)]
+    $default       reduce using rule 8 (Izraz)
+
+
+State 20
+
+    8 Izraz: Izraz . unija_token Izraz
+    9      | Izraz . razlika_token Izraz
+    9      | Izraz razlika_token Izraz .
+   10      | Izraz . presek_token Izraz
+
+    unija_token    shift, and go to state 12
+    razlika_token  shift, and go to state 13
+    presek_token   shift, and go to state 14
+
+    unija_token    [reduce using rule 9 (Izraz)]
+    razlika_token  [reduce using rule 9 (Izraz)]
+    presek_token   [reduce using rule 9 (Izraz)]
+    $default       reduce using rule 9 (Izraz)
+
+
+State 21
+
+    8 Izraz: Izraz . unija_token Izraz
+    9      | Izraz . razlika_token Izraz
+   10      | Izraz . presek_token Izraz
+   10      | Izraz presek_token Izraz .
+
+    unija_token    shift, and go to state 12
+    razlika_token  shift, and go to state 13
+    presek_token   shift, and go to state 14
+
+    unija_token    [reduce using rule 10 (Izraz)]
+    razlika_token  [reduce using rule 10 (Izraz)]
+    presek_token   [reduce using rule 10 (Izraz)]
+    $default       reduce using rule 10 (Izraz)
+
+
+State 22
+
+    4 Naredba: id_token '=' num_token oddo_token num_token . ';'
+
+    ';'  shift, and go to state 25
+
+
+State 23
+
+    3 Naredba: id_token '=' '{' NizBrojeva '}' . ';'
+
+    ';'  shift, and go to state 26
+
+
+State 24
+
+    6 NizBrojeva: NizBrojeva ',' . num_token
+
+    num_token  shift, and go to state 27
+
+
+State 25
+
+    4 Naredba: id_token '=' num_token oddo_token num_token ';' .
+
+    $default  reduce using rule 4 (Naredba)
+
+
+State 26
+
+    3 Naredba: id_token '=' '{' NizBrojeva '}' ';' .
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 27
+
+    6 NizBrojeva: NizBrojeva ',' num_token .
+
+    $default  reduce using rule 6 (NizBrojeva)

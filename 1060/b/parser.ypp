@@ -1,0 +1,72 @@
+%{
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <set>
+#include <map>
+#include "Set.hpp"
+
+using namespace std;
+
+int yylex();
+
+void yyerror(string s){
+cerr<<s<<endl;
+exit(EXIT_FAILURE);
+}
+
+map<string,Set*> tablica;
+
+%}
+
+%union { double d;
+	 string* s;
+	 Set* v;	}
+
+%token <d> num_token
+%token <s> id_token
+%token oddo_token
+%token print_token
+%token unija_token
+%token razlika_token
+%token presek_token
+%type <v> NizBrojeva
+%type <v> Izraz
+
+
+
+
+%%
+
+Program: Program Naredba
+	| Naredba
+;
+
+Naredba: id_token '=' '{' NizBrojeva '}' ';' {tablica[*$1]=$4;}
+	| id_token '=' num_token oddo_token num_token ';'{tablica[*$1]=new Set(); 
+								for(double i=$3; i<=$5; i++)
+									tablica[*$1]->insert(i);} 
+	| print_token Izraz ';' {cout<<*$2;}
+;
+
+NizBrojeva: NizBrojeva ',' num_token {$$->insert($3);}
+	| num_token {Set* novi= new Set(); novi->insert($1); $$=novi;}
+;
+
+Izraz: Izraz unija_token Izraz {$$=new Set((*$1)+(*$3));}
+	| Izraz razlika_token Izraz {$$=new Set((*$1)-(*$3));}
+	| Izraz presek_token Izraz {$$=new Set((*$1)*(*$3));}
+	| id_token  {map<string, Set*>::iterator it= tablica.find(*$1);
+						if(it!=tablica.end())
+							$$=new Set(*(it->second));		
+						else yyerror("Ne postoji takav skup!");}
+	
+
+
+
+
+%%
+int main(){
+yyparse();
+return 0;
+}

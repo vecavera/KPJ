@@ -1,0 +1,65 @@
+%{
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <vector>
+#include "element.hpp"
+
+using namespace std;
+
+int yylex();
+
+void yyerror (string s) {
+cerr<<s<<endl;
+exit(EXIT_FAILURE);
+}
+
+
+
+
+%}
+
+%union {
+int i;
+Lista* l;
+vector<Element*>* v;
+Element* e;
+}
+
+%type <l> Lista
+%type <v> NizElemenata
+%type <e> Elem
+%token <i> num_token car_token
+
+
+
+%%
+
+Program: Program Naredba 
+| Naredba
+;
+
+Naredba: Lista {cout<<$1->vrednost()<<endl;}
+;
+
+Lista: '(' NizElemenata ')' {$$=new Lista(*$2);}
+;
+
+NizElemenata: NizElemenata Elem {$1->push_back($2); $$=$1;}
+| Elem {$$= new vector<Element*>(); $$->push_back($1);}
+;
+
+Elem: num_token {$$= new Broj($1);}
+| '+' {$$ = new Znak ('+');}
+| '*' {$$ = new Znak ('*');}
+| Lista {$$ = new Lista($1->vratiListu());}
+;
+
+
+
+
+%%
+int main () {
+yyparse();
+return 0;
+}
