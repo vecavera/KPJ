@@ -1,0 +1,31 @@
+#ifndef METOD_HPP
+#define METOD_HPP
+
+#include <iostream>
+#include <string>
+#include <cstdlib>
+
+using namespace std;
+
+class Metod {
+public:
+	virtual void izvrsi(string *s)const=0;
+
+};
+
+class Duzina {
+public:
+	Duzina(string* s): _s(s){}
+	int izvrsi (string* s)const {return s->length();}
+private:
+	string* _s;
+};
+
+
+
+
+
+
+
+
+#endif

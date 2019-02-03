@@ -1,0 +1,51 @@
+%{
+#include <iostream>
+#include <cstdlib>
+#include <string>
+
+using namespace std;
+
+void yyerror(string s){
+cerr<<s<<endl;
+exit(EXIT_FAILURE);
+}
+
+%}
+%union{
+string* s;
+int d;
+}
+
+%token puts_token abs_token reverse_token index_token length_token sort_token uniq_token downcase_token
+%token <s> string_token
+%token <d> num_token
+
+
+
+
+%%
+
+Program: Program Naredba 
+| Naredba
+;
+
+Naredba: puts_token num_token '.' abs_token
+| puts_token string_token '.' NizMetoda
+;
+
+NizMetoda: NizMetoda '.' M
+| M
+;
+
+M: reverse_token
+| length_token
+| index_token
+| sort_token
+| uniq_token
+| downcase_token
+
+%%
+int main() {
+yyparse();
+return 0;
+}
